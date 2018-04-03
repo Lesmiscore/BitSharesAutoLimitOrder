@@ -55,9 +55,9 @@ object Main {
                     )
                 }
                 .toList()
-        println("Creating transation")
+        println("Creating transaction")
         val tx = Transaction(lesmiKey, null, ops)
-        println("Uploading transation")
+        println("Uploading transaction")
         val obj = Any()
         val ws = WebSocketFactory().createSocket("wss://ap-southeast-2.bts.crypto-bridge.org")
         ws.addListener(TransactionBroadcastSequence(tx, bts, object : WitnessResponseListener {
