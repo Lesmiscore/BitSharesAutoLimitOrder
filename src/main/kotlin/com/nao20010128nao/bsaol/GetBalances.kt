@@ -1,5 +1,6 @@
 package com.nao20010128nao.bsaol
 
+import com.google.common.primitives.UnsignedLong
 import com.shopify.promises.Promise
 import com.shopify.promises.then
 import cy.agorise.graphenej.Asset
@@ -20,6 +21,7 @@ object GetBalances {
         requestAssetsPromise()
                 .then { requestUserBalancePromise(it) }
                 .then { sortPromise(it) }
+                .then { removeZeroPromise(it) }
                 .then { displayPromise(it) }
                 .whenComplete {
                     synchronized(lock) {
@@ -63,7 +65,18 @@ object GetBalances {
         return Promise {
             onCancel { }
             try {
-                resolve(list.sortedWith(AssetAmountComparatorByAmount))
+                resolve(list.sortedWith(AssetAmountComparatorByAmount and AssetAmountComparatorByIds))
+            } catch (e: Throwable) {
+                reject(e)
+            }
+        }
+    }
+
+    fun removeZeroPromise(list: List<AssetAmount>): Promise<List<AssetAmount>, Any?> {
+        return Promise {
+            onCancel { }
+            try {
+                resolve(list.filter { it.amount != UnsignedLong.ZERO })
             } catch (e: Throwable) {
                 reject(e)
             }
