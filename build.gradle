@@ -30,6 +30,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'com.github.nao20010128nao:graphenej:fa269c5f06'
+    compile 'com.github.Shopify:promise-kotlin:0854465aae'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 

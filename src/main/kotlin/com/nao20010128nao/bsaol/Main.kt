@@ -59,11 +59,11 @@ object Main {
         val tx = Transaction(lesmiKey, null, ops)
         println("Uploading transaction")
         val obj = Any()
-        val ws = WebSocketFactory().createSocket("wss://ap-southeast-2.bts.crypto-bridge.org")
+        val ws = newWs()
         ws.addListener(TransactionBroadcastSequence(tx, bts, object : WitnessResponseListener {
             override fun onSuccess(p0: WitnessResponse<*>?) {
                 synchronized(obj) {
-                    (obj as java.lang.Object).notifyAll()
+                    obj.notify()
                 }
                 println("OK")
                 println(p0?.result)
@@ -72,7 +72,7 @@ object Main {
 
             override fun onError(p0: BaseResponse.Error?) {
                 synchronized(obj) {
-                    (obj as java.lang.Object).notifyAll()
+                    obj.notify()
                 }
                 println("NG")
                 println(p0)
@@ -81,7 +81,7 @@ object Main {
         }))
         ws.connect()
         synchronized(obj) {
-            (obj as java.lang.Object).wait()
+            obj.wait()
         }
     }
 }
