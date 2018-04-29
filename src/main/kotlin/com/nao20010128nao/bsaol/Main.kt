@@ -1,7 +1,6 @@
 package com.nao20010128nao.bsaol
 
 import com.google.common.primitives.UnsignedLong
-import com.neovisionaries.ws.client.WebSocketFactory
 import cy.agorise.graphenej.Asset
 import cy.agorise.graphenej.AssetAmount
 import cy.agorise.graphenej.Transaction
@@ -12,17 +11,18 @@ import cy.agorise.graphenej.models.BaseResponse
 import cy.agorise.graphenej.models.WitnessResponse
 import cy.agorise.graphenej.operations.LimitOrderCreateOperation
 import org.bitcoinj.core.DumpedPrivateKey
+import java.util.*
 
 object Main {
     const val oneMona = 1000000
-    const val quoteMonaBase = 860000
-    const val oneMonaUnit = 10000
+    const val quoteMonaBase = 91000
+    const val oneMonaUnit = 10
 
     val bts = Asset("1.3.0")
     val zeny = Asset("1.3.2481")
     val mona = Asset("1.3.2570")
 
-    val oneHundredZeny = AssetAmount(UnsignedLong.valueOf(100_000000), zeny)
+    val oneHundredZeny = AssetAmount(UnsignedLong.valueOf(10_000000), zeny)
 
     val lesmiAccount = UserAccount("1.2.519685", "nao20010128nao")
 
@@ -39,8 +39,9 @@ object Main {
             val start = quoteMonaBase
             val step = oneMonaUnit
             generateSequence { 0 }
-                    .take(10)
+                    .take(101)
                     .mapIndexed { index, _ -> start + step * index }
+                    .drop(1)
         }
         println("Creating operations")
         val ops = seq
@@ -57,6 +58,11 @@ object Main {
                 .toList()
         println("Creating transaction")
         val tx = Transaction(lesmiKey, null, ops)
+        println("Num of ops: " + ops.size)
+        ops.forEach {
+            println(it.minToReceive.amount)
+        }
+        Scanner(System.`in`).nextLine()
         println("Uploading transaction")
         val obj = Any()
         val ws = newWs()
