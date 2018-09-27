@@ -13,8 +13,6 @@ import cy.agorise.graphenej.models.WitnessResponse
 
 object GetBalances {
 
-    val lesmiAccount = UserAccount("1.2.519685", "nao20010128nao")
-
     @JvmStatic
     fun main(args: Array<String>) {
         val lock = Any()
@@ -33,12 +31,12 @@ object GetBalances {
         }
     }
 
-    fun requestUserBalancePromise(completeAsset: List<Asset> = emptyList()): Promise<List<AssetAmount>, Any?> {
+    fun requestUserBalancePromise(completeAsset: List<Asset> = emptyList(), account: UserAccount = lesmiAccount): Promising<List<AssetAmount>> {
         return Promise {
             onCancel { }
             val assetMap = completeAsset.map { it.objectId to it }.toMap()
             val ws = newWs()
-            ws.addListener(GetAccountBalances(lesmiAccount, emptyList(), true, object : WitnessResponseListener {
+            ws.addListener(GetAccountBalances(account, emptyList(), true, object : WitnessResponseListener {
                 override fun onSuccess(p0: WitnessResponse<*>?) {
                     println("OK")
                     process((p0?.result as? List<AssetAmount>)
@@ -55,6 +53,7 @@ object GetBalances {
                     } else {
                         reject(value)
                     }
+                    ws.disconnect()
                 }
             }))
             ws.connect()

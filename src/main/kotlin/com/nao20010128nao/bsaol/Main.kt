@@ -1,37 +1,26 @@
 package com.nao20010128nao.bsaol
 
 import com.google.common.primitives.UnsignedLong
-import cy.agorise.graphenej.Asset
 import cy.agorise.graphenej.AssetAmount
 import cy.agorise.graphenej.Transaction
-import cy.agorise.graphenej.UserAccount
 import cy.agorise.graphenej.api.TransactionBroadcastSequence
 import cy.agorise.graphenej.interfaces.WitnessResponseListener
 import cy.agorise.graphenej.models.BaseResponse
 import cy.agorise.graphenej.models.WitnessResponse
 import cy.agorise.graphenej.operations.LimitOrderCreateOperation
-import org.bitcoinj.core.DumpedPrivateKey
-import java.util.*
+import java.math.MathContext
 
 object Main {
     const val oneMona = 1000000
-    const val quoteMonaBase = 91000
-    const val oneMonaUnit = 10
+    const val quoteMonaBase = 1300000
+    const val oneMonaUnit = 10000
 
-    val bts = Asset("1.3.0")
-    val zeny = Asset("1.3.2481")
-    val mona = Asset("1.3.2570")
-
-    val oneHundredZeny = AssetAmount(UnsignedLong.valueOf(10_000000), zeny)
-
-    val lesmiAccount = UserAccount("1.2.519685", "nao20010128nao")
+    val twoHundredZeny: AssetAmount
+        get() = AssetAmount(UnsignedLong.valueOf(200_000000), zeny)
 
     const val tenYearsInSecond = 10 * 365 * 86400
     val afterTenYrs: Long
-        get() =
-            System.currentTimeMillis() / 1000 + tenYearsInSecond
-
-    val lesmiKey = DumpedPrivateKey.fromBase58(null, "").key
+        get() = System.currentTimeMillis() / 1000 + tenYearsInSecond
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -39,7 +28,7 @@ object Main {
             val start = quoteMonaBase
             val step = oneMonaUnit
             generateSequence { 0 }
-                    .take(101)
+                    .take(11)
                     .mapIndexed { index, _ -> start + step * index }
                     .drop(1)
         }
@@ -49,7 +38,7 @@ object Main {
                 .map {
                     LimitOrderCreateOperation(
                             lesmiAccount,
-                            oneHundredZeny,
+                            twoHundredZeny,
                             AssetAmount(it, mona),
                             afterTenYrs.toInt(),
                             false
@@ -60,9 +49,10 @@ object Main {
         val tx = Transaction(lesmiKey, null, ops)
         println("Num of ops: " + ops.size)
         ops.forEach {
-            println(it.minToReceive.amount)
+            println("%.10f".format(it.minToReceive.amount.toBigDecimal().divide(it.amountToSell.amount.toBigDecimal(), MathContext.UNLIMITED)))
         }
-        Scanner(System.`in`).nextLine()
+        //Scanner(System.`in`).nextLine()
+        //return
         println("Uploading transaction")
         val obj = Any()
         val ws = newWs()
