@@ -19,7 +19,7 @@ object SendGarbegies {
                 .then { GetBalances.requestUserBalancePromise(it) }
                 .then { GetBalances.sortPromise(it) }
                 .then { GetBalances.removeZeroPromise(it) }
-                .then { excludePromise(it, IndexedAssets) }
+                .then { excludePromise(it.take(20), IndexedAssets) }
                 .then { createTransfersPromise(it) }
                 .then { packTxPromise(it) }
                 .then { sendTx(it) }

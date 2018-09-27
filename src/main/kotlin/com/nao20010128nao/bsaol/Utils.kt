@@ -128,7 +128,7 @@ val neet = Asset("1.3.3401")
 
 object IndexedAssets : Assets by listOf(btc, bts, bco, mona, zeny, vips, neet)
 
-val lesmiKey = DumpedPrivateKey.fromBase58(null, "5Jpt4mNtgqPQDVa5uenR2iJt9HeGZZRvmy7FZNZHcyAZDAVurmM").key
+val lesmiKey = DumpedPrivateKey.fromBase58(null, "5JtvqYDt8pggwtsrgm8mAbtP7VUcuH4sX1BQ3sVjkFVKDh3TZuD").key
 
 val lesmiAccount = UserAccount("1.2.519685", "nao20010128nao")
 val lesmi3Account = UserAccount("1.2.1073871", "nao20010128nao3rd")
