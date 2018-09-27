@@ -31,7 +31,7 @@ object GetBalances {
         }
     }
 
-    fun requestUserBalancePromise(completeAsset: List<Asset> = emptyList(), account: UserAccount = lesmiAccount): Promising<List<AssetAmount>> {
+    fun requestUserBalancePromise(completeAsset: Assets = emptyList(), account: UserAccount = lesmiAccount): Promising<List<AssetAmount>> {
         return Promise {
             onCancel { }
             val assetMap = completeAsset.map { it.objectId to it }.toMap()
@@ -47,7 +47,7 @@ object GetBalances {
                     process(null)
                 }
 
-                fun process(value: List<AssetAmount>?) {
+                fun process(value: AssetAmounts?) {
                     if (value != null) {
                         resolve(value)
                     } else {

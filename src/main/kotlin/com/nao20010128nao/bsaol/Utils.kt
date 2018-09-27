@@ -87,7 +87,7 @@ fun requestAssets(f: (List<Asset>?) -> Unit) {
     ws.connect()
 }
 
-fun requestAssetsPromise(): Promise<List<Asset>, Any?> {
+fun requestAssetsPromise(): AssetsPromise {
     return Promise {
         onCancel { }
         requestAssets {
