@@ -60,7 +60,7 @@ object GetBalances {
         }
     }
 
-    fun sortPromise(list: List<AssetAmount>): Promise<List<AssetAmount>, Any?> {
+    fun sortPromise(list: List<AssetAmount>): AssetAmountsPromise {
         return Promise {
             onCancel { }
             try {
@@ -71,7 +71,7 @@ object GetBalances {
         }
     }
 
-    fun removeZeroPromise(list: List<AssetAmount>): Promise<List<AssetAmount>, Any?> {
+    fun removeZeroPromise(list: List<AssetAmount>): AssetAmountsPromise {
         return Promise {
             onCancel { }
             try {
@@ -82,7 +82,7 @@ object GetBalances {
         }
     }
 
-    fun displayPromise(list: List<AssetAmount>): Promise<List<AssetAmount>, Any?> {
+    fun displayPromise(list: List<AssetAmount>): AssetAmountsPromise {
         return Promise {
             list.forEach {
                 println("%2.8f %s".format(it.displayAmount, it.asset.symbol))
